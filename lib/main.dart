@@ -1,6 +1,8 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test_project/blocs/home_bloc/home_bloc.dart';
+import 'package:test_project/domain/user_domain.dart';
+import 'package:test_project/ui/home_page/home_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -9,7 +11,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -17,73 +18,72 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const HomePage(),
-    );
-  }
-}
-
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: FutureBuilder(
-        future: HttpDomain()
-            .get(url: 'jsonplaceholder.typicode.com', path: '/users'),
-        builder: (context, AsyncSnapshot as) {
-          if (as.hasData && as.data != null) {
-            return ListView.builder(
-                itemCount: (as.data as List).length,
-                itemBuilder: (context, index) {
-                  return Text(as.data[index]['name']);
-                });
-          } else {
-            return Container(color: Colors.red);
-          }
-        },
+      home: BlocProvider<HomeBloc>(
+        create: (_) => HomeBloc(userDomain: UsersDomain()),
+        child: const HomePage(),
       ),
     );
   }
 }
 
-class HttpDomain {
-  Future<dynamic> get(
-      {required String url,
-      required String path,
-      Map<String, dynamic>? query}) async {
-    try {
-      Uri uri = Uri.https(url, path, query);
-      final response = await http.get(uri);
 
-      if (response.statusCode == 200) {
-        final jsonString = response.body;
-        return jsonDecode(jsonString);
-      } else {
-        throw Exception('Ошибка');
-      }
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
 
-  post(
-      {required String url,
-      required String path,
-      required Map<String, dynamic> post,
-      required Map<String, String>? header,
-      Map<String, dynamic>? query}) async {
-    try {
-      Uri uri = Uri.https(url, path, query);
-      final response = await http.post(uri, body: post, headers: header);
-      if (response.statusCode == 200) {
-        final jsonString = response.body;
-        return jsonDecode(jsonString);
-      } else {
-        throw Exception('Ошибка');
-      }
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
-}
+  // return BlocBuilder<PostBloc, PostsState>(
+  //       bloc: bloc,
+  //       builder: (context, state) {
+  //         return AnimatedContainer(
+  //           height: getHeight(state),
+  //           duration: const Duration(milliseconds: 300),
+  //           clipBehavior: Clip.hardEdge,
+  //           decoration: BoxDecoration(
+  //             borderRadius: BorderRadius.circular(5),
+  //           ),
+  //           margin: const EdgeInsets.all(5),
+  //           child: Container(
+  //             decoration: const BoxDecoration(color: Colors.white),
+  //             child: Column(
+  //               mainAxisAlignment: MainAxisAlignment.start,
+  //               children: [
+  //                 GestureDetector(
+  //                   onTap: () {
+  //                     expanded ? controller.forward() : controller.reverse();
+  //                     expanded = !expanded;
+  //                     bloc.state is PostsLoadedState
+  //                         ? null
+  //                         : bloc.loadPosts(widget.user.id);
+  //                     setState(() {});
+  //                   },
+  //                   child: Padding(
+  //                     padding: const EdgeInsets.all(5.0),
+  //                     child: Row(
+  //                       crossAxisAlignment: CrossAxisAlignment.start,
+  //                       children: [
+  //                         SizedBox(
+  //                           height: 90,
+  //                           child: Image.network(widget.user.avatars.first.url),
+  //                         ),
+  //                         const SizedBox(width: 10),
+  //                         Text(widget.user.name),
+  //                         const Spacer(),
+  //                         AnimatedIcon(
+  //                           icon: AnimatedIcons.close_menu,
+  //                           progress: controller,
+  //                         )
+  //                       ],
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 if (state is PostsLoadingState)
+  //                   const SizedBox.square(
+  //                       dimension: 30, child: CircularProgressIndicator()),
+  //                 if (state is PostsLoadedState && expanded)
+  //                   ...state.posts
+  //                       .map((e) => PostsWidget(
+  //                             post: e,
+  //                           ))
+  //                       .toList(),
+  //               ],
+  //             ),
+  //           ),
+  //         );
+  //       });
