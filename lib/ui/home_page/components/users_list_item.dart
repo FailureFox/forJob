@@ -13,20 +13,12 @@ class UsersListItems extends StatefulWidget {
   State<UsersListItems> createState() => _UsersListItemsState();
 }
 
-class _UsersListItemsState extends State<UsersListItems>
-    with SingleTickerProviderStateMixin {
+class _UsersListItemsState extends State<UsersListItems> {
   bool expanded = false;
-  late AnimationController controller;
 
   @override
   void initState() {
     super.initState();
-    controller = AnimationController(
-      value: 1,
-      vsync: this,
-      duration: const Duration(milliseconds: 250),
-      reverseDuration: const Duration(milliseconds: 250),
-    );
   }
 
   PostBloc bloc = PostBloc();
@@ -63,7 +55,6 @@ class _UsersListItemsState extends State<UsersListItems>
               Material(
                 child: InkWell(
                   onTap: () {
-                    expanded ? controller.forward() : controller.reverse();
                     expanded = !expanded;
                     bloc.state is PostsLoadedState
                         ? null
@@ -92,9 +83,7 @@ class _UsersListItemsState extends State<UsersListItems>
               if (state is PostsLoadedState && expanded)
                 Column(
                   children: state.posts
-                      .map(
-                        (e) => PostsWidget(post: e, userModel: widget.user),
-                      )
+                      .map((e) => PostsWidget(post: e, userModel: widget.user))
                       .toList(),
                 )
             ],
@@ -104,57 +93,3 @@ class _UsersListItemsState extends State<UsersListItems>
     );
   }
 }
-// AnimatedContainer(
-//             width: getHeight(state),
-//             height: getHeight(state),
-//             duration: const Duration(milliseconds: 300),
-//             clipBehavior: Clip.hardEdge,
-//             decoration: BoxDecoration(
-//               color: Colors.white,
-//               borderRadius: BorderRadius.circular(5),
-//             ),
-//             margin: const EdgeInsets.all(5),
-//             child: Column(
-//               mainAxisSize: MainAxisSize.min,
-//               mainAxisAlignment: MainAxisAlignment.start,
-//               children: [
-//                 Material(
-//                   child: InkWell(
-//                     onTap: () {
-//                       expanded ? controller.forward() : controller.reverse();
-//                       expanded = !expanded;
-//                       bloc.state is PostsLoadedState
-//                           ? null
-//                           : bloc.loadPosts(widget.user.id);
-//                       setState(() {});
-//                     },
-//                     child: Column(
-//                       crossAxisAlignment: CrossAxisAlignment.start,
-//                       children: [
-//                         Flexible(
-//                             child:
-//                                 Image.network(widget.user.avatars.first.url)),
-//                         const SizedBox(width: 10),
-//                         Text(widget.user.name),
-//                         const Spacer(),
-//                         AnimatedIcon(
-//                           icon: AnimatedIcons.close_menu,
-//                           progress: controller,
-//                         )
-//                       ],
-//                     ),
-//                   ),
-//                 ),
-//                 if (state is PostsLoadingState)
-//                   const SizedBox.square(
-//                       dimension: 30, child: CircularProgressIndicator()),
-//                 if (state is PostsLoadedState && expanded)
-//                   ...state.posts
-//                       .map((e) => PostsWidget(
-//                             post: e,
-//                             userModel: widget.user,
-//                           ))
-//                       .toList(),
-//               ],
-//             ),
-//           );
