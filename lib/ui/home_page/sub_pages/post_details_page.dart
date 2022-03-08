@@ -4,6 +4,7 @@ import 'package:test_project/blocs/post_details_bloc/post_details_State.dart';
 import 'package:test_project/blocs/post_details_bloc/post_details_bloc.dart';
 import 'package:test_project/blocs/posts_bloc/posts_bloc.dart';
 import 'package:test_project/domain/posts_domain.dart';
+import 'package:test_project/models/comments_model.dart';
 import 'package:test_project/models/user_model.dart';
 
 class PostDetailsPage extends StatelessWidget {
