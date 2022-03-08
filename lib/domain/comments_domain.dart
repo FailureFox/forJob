@@ -1,5 +1,6 @@
 import 'package:test_project/domain/http_domain.dart';
 import 'package:test_project/domain/posts_domain.dart';
+import 'package:test_project/models/comments_model.dart';
 
 class CommentsDomain {
   static const link = 'jsonplaceholder.typicode.com';

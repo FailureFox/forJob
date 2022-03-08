@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_project/blocs/post_details_bloc/post_details_State.dart';
 import 'package:test_project/domain/comments_domain.dart';
 import 'package:test_project/domain/posts_domain.dart';
+import 'package:test_project/models/comments_model.dart';
 
 class PostDetailsBloc extends Cubit<PostDetailsState> {
   CommentsDomain domain = CommentsDomain();

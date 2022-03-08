@@ -1,4 +1,4 @@
-import 'package:test_project/domain/posts_domain.dart';
+import 'package:test_project/models/comments_model.dart';
 
 class PostDetailsState {
   List<CommentModel> comments;
