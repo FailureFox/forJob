@@ -4,7 +4,6 @@ import 'package:test_project/blocs/home_bloc/home_bloc.dart';
 import 'package:test_project/blocs/home_bloc/home_state.dart';
 import 'package:test_project/ui/home_page/components/users_list.dart';
 
-import 'components/users_list_item.dart';
 import 'sub_pages/post_add_page.dart';
 
 class HomePage extends StatelessWidget {

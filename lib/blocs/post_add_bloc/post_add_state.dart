@@ -4,10 +4,10 @@ class PostAddState {
   List<PostModel> posts;
   String title;
   String body;
-  PostAddStatus status;
+  UniversalStatus status;
   PostAddState({
     this.posts = const [],
-    this.status = PostAddStatus.initial,
+    this.status = UniversalStatus.initial,
     this.title = '',
     this.body = '',
   });
@@ -16,7 +16,7 @@ class PostAddState {
     List<PostModel>? posts,
     String? title,
     String? body,
-    PostAddStatus? status,
+    UniversalStatus? status,
   }) {
     return PostAddState(
       posts: posts ?? this.posts,
@@ -27,4 +27,4 @@ class PostAddState {
   }
 }
 
-enum PostAddStatus { initial, added, loading, error }
+enum UniversalStatus { initial, added, loading, error }

@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:test_project/blocs/post_add_page_bloc/post_add_state.dart';
+import 'package:test_project/blocs/post_add_bloc/post_add_state.dart';
 import 'package:test_project/blocs/posts_bloc/posts_bloc.dart';
 import 'package:test_project/domain/posts_domain.dart';
 
@@ -16,7 +16,7 @@ class PostAddBloc extends Cubit<PostAddState> {
   }
 
   onSave() async {
-    emit(state.copyWith(status: PostAddStatus.loading));
+    emit(state.copyWith(status: UniversalStatus.loading));
     try {
       final PostModel post = await domain.addPost({
         'userId': id,
@@ -27,9 +27,9 @@ class PostAddBloc extends Cubit<PostAddState> {
 
       print(post);
       emit(state.copyWith(
-          title: '', body: '', posts: posts, status: PostAddStatus.added));
+          title: '', body: '', posts: posts, status: UniversalStatus.added));
     } catch (e) {
-      emit(state.copyWith(status: PostAddStatus.error));
+      emit(state.copyWith(status: UniversalStatus.error));
     }
   }
 }

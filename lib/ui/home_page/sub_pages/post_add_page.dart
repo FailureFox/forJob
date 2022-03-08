@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:test_project/blocs/post_add_page_bloc/post_add_bloc.dart';
-import 'package:test_project/blocs/post_add_page_bloc/post_add_state.dart';
+import 'package:test_project/blocs/post_add_bloc/post_add_bloc.dart';
+import 'package:test_project/blocs/post_add_bloc/post_add_state.dart';
 import 'package:test_project/ui/home_page/components/posts_widget.dart';
 
 class AddPage extends StatelessWidget {
@@ -23,10 +23,10 @@ class AddPage extends StatelessWidget {
                   child: BlocBuilder<PostAddBloc, PostAddState>(
                       bloc: bloc,
                       builder: (context, state) {
-                        if (state.status == PostAddStatus.loading) {
+                        if (state.status == UniversalStatus.loading) {
                           return const Center(
                               child: CircularProgressIndicator());
-                        } else if (state.status == PostAddStatus.added) {
+                        } else if (state.status == UniversalStatus.added) {
                           return ListView.builder(
                               itemCount: state.posts.length,
                               itemBuilder: (context, index) {
@@ -35,7 +35,7 @@ class AddPage extends StatelessWidget {
                                   userModel: null,
                                 );
                               });
-                        } else if (state.status == PostAddStatus.error) {
+                        } else if (state.status == UniversalStatus.error) {
                           return const Center(child: Text('Ошибка'));
                         } else {
                           return const Center(

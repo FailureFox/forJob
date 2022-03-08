@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:test_project/domain/user_domain.dart';
 import 'package:test_project/models/address_model.dart';
 
 import 'company_model.dart';
@@ -14,7 +11,8 @@ class UserModel {
   String phone;
   String website;
   Company company;
-  List<AvatarModel> avatars;
+  String avatarPath;
+  static const _assetPath = 'assets/avatars/avataaars';
   UserModel({
     required this.id,
     required this.name,
@@ -24,7 +22,7 @@ class UserModel {
     required this.phone,
     required this.website,
     required this.company,
-    required this.avatars,
+    required this.avatarPath,
   });
 
   Map<String, dynamic> toMap() {
@@ -37,12 +35,11 @@ class UserModel {
       'phone': phone,
       'website': website,
       'company': company.toMap(),
-      'avatar': avatars.map((x) => x.toMap()).toList(),
+      'avatar': avatarPath,
     };
   }
 
-  factory UserModel.fromMap(
-      Map<String, dynamic> map, List<AvatarModel> avatars) {
+  factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
       id: map['id']?.toInt() ?? 0,
       name: map['name'] ?? '',
@@ -52,7 +49,7 @@ class UserModel {
       phone: map['phone'] ?? '',
       website: map['website'] ?? '',
       company: Company.fromMap(map['company']),
-      avatars: avatars,
+      avatarPath: _assetPath + '(${map['id']}).png',
     );
   }
 }

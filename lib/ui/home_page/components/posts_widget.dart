@@ -10,19 +10,22 @@ class PostsWidget extends StatelessWidget {
   final UserModel? userModel;
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 100,
-      child: ListTile(
-        onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => PostDetailsPage(
-                      post: post,
-                      user: userModel,
-                    ))),
-        title: Text(post.title),
-        subtitle: Text(post.body, maxLines: 2),
-      ),
+    return Column(
+      children: [
+        Material(
+          child: ListTile(
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => PostDetailsPage(
+                          post: post,
+                          user: userModel,
+                        ))),
+            title: Text(post.title),
+          ),
+        ),
+        const Divider(height: 0),
+      ],
     );
   }
 }

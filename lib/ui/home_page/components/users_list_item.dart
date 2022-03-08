@@ -32,83 +32,129 @@ class _UsersListItemsState extends State<UsersListItems>
   PostBloc bloc = PostBloc();
 
   double getHeight(PostsState state) {
+    final height = MediaQuery.of(context).size.width / 1.2;
     if (expanded) {
       if (state is PostsLoadingState) {
-        return 100 + 30;
+        return height + 60;
       } else if (state is PostsLoadedState) {
-        return 100 + state.posts.length * 100;
+        return height +
+            (Theme.of(context).textTheme.bodyText1!.fontSize! * 4) *
+                state.posts.length;
       } else {
-        return 100;
+        return height;
       }
     } else {
-      return 100;
+      return height;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PostBloc, PostsState>(
-        bloc: bloc,
-        builder: (context, state) {
-          return AnimatedContainer(
-            height: getHeight(state),
-            duration: const Duration(milliseconds: 300),
-            clipBehavior: Clip.hardEdge,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-            ),
-            margin: const EdgeInsets.all(5),
-            child: Container(
-              decoration: const BoxDecoration(color: Colors.white),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Material(
-                    child: InkWell(
-                      onTap: () {
-                        expanded ? controller.forward() : controller.reverse();
-                        expanded = !expanded;
-                        bloc.state is PostsLoadedState
-                            ? null
-                            : bloc.loadPosts(widget.user.id);
-                        setState(() {});
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              height: 90,
-                              child:
-                                  Image.network(widget.user.avatars.first.url),
-                            ),
-                            const SizedBox(width: 10),
-                            Text(widget.user.name),
-                            const Spacer(),
-                            AnimatedIcon(
-                              icon: AnimatedIcons.close_menu,
-                              progress: controller,
-                            )
-                          ],
-                        ),
+      bloc: bloc,
+      builder: (context, state) {
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          height: getHeight(state),
+          color: Colors.white,
+          margin: const EdgeInsets.all(15),
+          child: Column(
+            children: [
+              Material(
+                child: InkWell(
+                  onTap: () {
+                    expanded ? controller.forward() : controller.reverse();
+                    expanded = !expanded;
+                    bloc.state is PostsLoadedState
+                        ? null
+                        : bloc.loadPosts(widget.user.id);
+                    setState(() {});
+                  },
+                  child: Container(
+                    color: Colors.white,
+                    child: SizedBox.square(
+                      dimension: MediaQuery.of(context).size.width / 1.2,
+                      child: Column(
+                        children: [
+                          Flexible(child: Image.asset(widget.user.avatarPath)),
+                          Text(widget.user.name),
+                        ],
                       ),
                     ),
                   ),
-                  if (state is PostsLoadingState)
-                    const SizedBox.square(
-                        dimension: 30, child: CircularProgressIndicator()),
-                  if (state is PostsLoadedState && expanded)
-                    ...state.posts
-                        .map((e) => PostsWidget(
-                              post: e,
-                              userModel: widget.user,
-                            ))
-                        .toList(),
-                ],
+                ),
               ),
-            ),
-          );
-        });
+              if (state is PostsLoadingState)
+                const Padding(
+                  padding: EdgeInsets.all(10),
+                  child: CircularProgressIndicator(),
+                ),
+              if (state is PostsLoadedState && expanded)
+                Column(
+                  children: state.posts
+                      .map(
+                        (e) => PostsWidget(post: e, userModel: widget.user),
+                      )
+                      .toList(),
+                )
+            ],
+          ),
+        );
+      },
+    );
   }
 }
+// AnimatedContainer(
+//             width: getHeight(state),
+//             height: getHeight(state),
+//             duration: const Duration(milliseconds: 300),
+//             clipBehavior: Clip.hardEdge,
+//             decoration: BoxDecoration(
+//               color: Colors.white,
+//               borderRadius: BorderRadius.circular(5),
+//             ),
+//             margin: const EdgeInsets.all(5),
+//             child: Column(
+//               mainAxisSize: MainAxisSize.min,
+//               mainAxisAlignment: MainAxisAlignment.start,
+//               children: [
+//                 Material(
+//                   child: InkWell(
+//                     onTap: () {
+//                       expanded ? controller.forward() : controller.reverse();
+//                       expanded = !expanded;
+//                       bloc.state is PostsLoadedState
+//                           ? null
+//                           : bloc.loadPosts(widget.user.id);
+//                       setState(() {});
+//                     },
+//                     child: Column(
+//                       crossAxisAlignment: CrossAxisAlignment.start,
+//                       children: [
+//                         Flexible(
+//                             child:
+//                                 Image.network(widget.user.avatars.first.url)),
+//                         const SizedBox(width: 10),
+//                         Text(widget.user.name),
+//                         const Spacer(),
+//                         AnimatedIcon(
+//                           icon: AnimatedIcons.close_menu,
+//                           progress: controller,
+//                         )
+//                       ],
+//                     ),
+//                   ),
+//                 ),
+//                 if (state is PostsLoadingState)
+//                   const SizedBox.square(
+//                       dimension: 30, child: CircularProgressIndicator()),
+//                 if (state is PostsLoadedState && expanded)
+//                   ...state.posts
+//                       .map((e) => PostsWidget(
+//                             post: e,
+//                             userModel: widget.user,
+//                           ))
+//                       .toList(),
+//               ],
+//             ),
+//           );
