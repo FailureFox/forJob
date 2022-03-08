@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_project/blocs/post_add_bloc/post_add_state.dart';
-import 'package:test_project/blocs/posts_bloc/posts_bloc.dart';
 import 'package:test_project/domain/posts_domain.dart';
+import 'package:test_project/models/post_model.dart';
 
 class PostAddBloc extends Cubit<PostAddState> {
   final PostsDomain domain = PostsDomain();
@@ -27,7 +27,7 @@ class PostAddBloc extends Cubit<PostAddState> {
 
       print(post);
       emit(state.copyWith(
-          title: '', body: '', posts: posts, status: UniversalStatus.added));
+          title: '', body: '', posts: posts, status: UniversalStatus.loaded));
     } catch (e) {
       emit(state.copyWith(status: UniversalStatus.error));
     }

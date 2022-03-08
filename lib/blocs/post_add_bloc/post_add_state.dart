@@ -1,4 +1,4 @@
-import 'package:test_project/blocs/posts_bloc/posts_bloc.dart';
+import 'package:test_project/models/post_model.dart';
 
 class PostAddState {
   List<PostModel> posts;
@@ -27,4 +27,4 @@ class PostAddState {
   }
 }
 
-enum UniversalStatus { initial, added, loading, error }
+enum UniversalStatus { initial, loaded, loading, error }

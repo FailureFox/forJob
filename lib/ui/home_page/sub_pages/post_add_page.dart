@@ -26,7 +26,7 @@ class AddPage extends StatelessWidget {
                         if (state.status == UniversalStatus.loading) {
                           return const Center(
                               child: CircularProgressIndicator());
-                        } else if (state.status == UniversalStatus.added) {
+                        } else if (state.status == UniversalStatus.loaded) {
                           return ListView.builder(
                               itemCount: state.posts.length,
                               itemBuilder: (context, index) {

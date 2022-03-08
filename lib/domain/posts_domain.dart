@@ -1,8 +1,6 @@
-import 'dart:convert';
-
-import 'package:test_project/blocs/posts_bloc/posts_bloc.dart';
 import 'package:test_project/domain/http_domain.dart';
 import 'package:test_project/models/comments_model.dart';
+import 'package:test_project/models/post_model.dart';
 
 class PostsDomain {
   static const link = 'jsonplaceholder.typicode.com';

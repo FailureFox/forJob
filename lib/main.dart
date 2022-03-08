@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_project/blocs/home_bloc/home_bloc.dart';
+import 'package:test_project/domain/posts_domain.dart';
 import 'package:test_project/domain/user_domain.dart';
 import 'package:test_project/ui/home_page/home_page.dart';
 
@@ -19,7 +20,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: BlocProvider<HomeBloc>(
-        create: (_) => HomeBloc(userDomain: UsersDomain()),
+        create: (_) =>
+            HomeBloc(userDomain: UsersDomain(), postDomain: PostsDomain()),
         child: const HomePage(),
       ),
     );
