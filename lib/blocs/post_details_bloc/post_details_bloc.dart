@@ -22,10 +22,14 @@ class PostDetailsBloc extends Cubit<PostDetailsState> {
     }
   }
 
-  sendComment(text) async {
+  sendComment(
+      {required String text,
+      required String email,
+      required String name}) async {
     if (text != '') {
       emit(state.copyWith(status: PostDetailsStatus.sending));
-      final CommentModel model = await domain.sendPostComment(1, text);
+      final CommentModel model =
+          await domain.sendPostComment(text: text, email: email, name: name);
       final List<CommentModel> comments = [model, ...state.comments];
       emit(
           state.copyWith(comments: comments, status: PostDetailsStatus.sended));

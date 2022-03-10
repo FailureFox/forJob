@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test_project/blocs/post_add_bloc/post_add_bloc.dart';
 import 'package:test_project/blocs/post_details_bloc/post_details_State.dart';
 import 'package:test_project/blocs/post_details_bloc/post_details_bloc.dart';
 import 'package:test_project/models/comments_model.dart';
@@ -55,26 +56,138 @@ class CommentInputWidget extends StatefulWidget {
 }
 
 class _CommentInputWidgetState extends State<CommentInputWidget> {
-  TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: TextField(
-        controller: controller,
-        onEditingComplete: () {
-          BlocProvider.of<PostDetailsBloc>(context)
-              .sendComment(controller.text);
-          controller.clear();
-          setState(() {});
-        },
-        decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.black.withOpacity(0.05),
-            border: InputBorder.none,
-            hintText: 'Write comment'),
+      child: Form(
+        child: Column(
+          children: [
+            GestureDetector(
+              onTap: () => addCommentDialog(context),
+              child: TextFormField(
+                enabled: false,
+                decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.black.withOpacity(0.05),
+                    border: InputBorder.none,
+                    hintText: 'Write comment'),
+              ),
+            ),
+          ],
+        ),
       ),
     );
+  }
+
+  addCommentDialog(context) {
+    final TextEditingController commentController = TextEditingController();
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController nameController = TextEditingController();
+    GlobalKey<FormState> formKey = GlobalKey<FormState>();
+    showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (secondContext) {
+          return AnimatedContainer(
+            duration: const Duration(milliseconds: 0),
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(secondContext).viewInsets.bottom),
+            child: Form(
+              key: formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(15.0),
+                    child: Text(
+                      'Comments add',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      validator: (text) {
+                        return text == null ? 'Form is Empty' : null;
+                      },
+                      controller: commentController,
+                      decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.black.withOpacity(0.05),
+                          border: InputBorder.none,
+                          hintText: 'Write comment'),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      validator: (text) {
+                        if (text == null) {
+                          return 'Form is empty';
+                        } else if (text.length < 2) {
+                          return 'Min lenght is 2';
+                        } else {
+                          return null;
+                        }
+                      },
+                      controller: nameController,
+                      decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.black.withOpacity(0.05),
+                          border: InputBorder.none,
+                          hintText: 'Write name'),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      controller: emailController,
+                      validator: (text) {
+                        if (text == null) {
+                          return 'Form is empty';
+                        } else if (RegExp(
+                                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                            .hasMatch(text)) {
+                          return null;
+                        } else {
+                          return 'Incorrect email';
+                        }
+                      },
+                      decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.black.withOpacity(0.05),
+                          border: InputBorder.none,
+                          hintText: 'Write email'),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.width / 8,
+                      child: ElevatedButton(
+                          onPressed: () {
+                            if (formKey.currentState!.validate()) {
+                              BlocProvider.of<PostDetailsBloc>(context)
+                                  .sendComment(
+                                text: commentController.text,
+                                email: emailController.text,
+                                name: nameController.text,
+                              );
+                              FocusScope.of(secondContext).unfocus();
+                              Navigator.pop(context);
+                            }
+                          },
+                          child: const Text('Добавить')),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
+        });
   }
 }
 

@@ -14,11 +14,14 @@ class CommentsDomain {
     }
   }
 
-  Future<CommentModel> sendPostComment(int userId, String text) async {
+  Future<CommentModel> sendPostComment(
+      {required String name,
+      required String text,
+      required String email}) async {
     try {
       final Map<String, dynamic> map =
           await HttpDomain.domain.post(url: link, path: '/comments', post: {
-        "name": "Вы",
+        "name": name,
         "body": text,
         "email": "testMail@mail.ru",
       }, header: {
